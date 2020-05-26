@@ -1,0 +1,51 @@
+version: "3.3"
+
+services:
+  natsy:
+    image: 'nats:latest'
+    container_name: "nats-server"
+    entrypoint: "/nats-server"
+    expose:
+      - "4222"
+    ports:
+      - "8222:8222"
+    hostname: nats-server   
+     
+  publisher1:
+    build:
+      context: "./publisher1"
+    links:
+      - natsy
+    environment:
+      - "NATS_URI=nats://natsy:4222"
+    depends_on:
+      - natsy
+    ports:
+      - "8282:8080"
+    container_name: "publisher-1"
+
+  subscriber1:
+    build:
+      context: "./subscriber1"
+    links:
+      - natsy
+    environment:
+      - "NATS_URI=nats://natsy:4222"
+    depends_on:
+      - natsy
+    ports:
+      - "8484:8181"
+    container_name: "subscriber-1"
+
+  subscriber2:
+    build:
+      context: "./subscriber2"
+    links:
+      - natsy
+    environment:
+      - "NATS_URI=nats://natsy:4222"
+    depends_on:
+      - natsy
+    ports:
+      - "8686:8181"
+    container_name: "subscriber-2"
