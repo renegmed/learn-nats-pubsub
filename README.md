@@ -1,4 +1,4 @@
-# Simple Golang/NATS Pub and Sub application for learning #
+### Simple Golang/NATS Pub and Sub application for learning ###
 
 To run:
 
@@ -20,9 +20,9 @@ To run:
 
 5. Publisher 1 publish product info by proving product ID. Example:
 
-    curl -X POST  http://localhost:8282/pub-product-info/1 
+        curl -X POST  http://localhost:8282/pub-product-info/1 
 
-    curl -X POST  http://localhost:8282/pub-product-info/2 
+        curl -X POST  http://localhost:8282/pub-product-info/2 
 
 Note:
     Each application must run go mod vendor before building containers
