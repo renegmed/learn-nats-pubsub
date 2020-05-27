@@ -24,6 +24,19 @@ To run:
 
         curl -X POST  http://localhost:8282/pub-product-info/2 
 
+        or 
+
+        make pub-info-pub1
+
+6. Inquire product list on subscriber 1 
+
+        make list-sub1
+
+7. Inquire product list on  subscriber 2
+
+        make list-sub2
+
+
 Note:
     Each application must run go mod vendor before building containers
 

@@ -15,8 +15,23 @@ type server struct {
 	nc *nats.Conn
 }
 
+var prodStore = NewProductStore()
+
 func (s server) healthz(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "OK")
+}
+
+func productsHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		productsJson, err := json.Marshal(prodStore.productList())
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-type", "application/json")
+		w.Write(productsJson)
+	}
 }
 
 func NewServer() (server, error) {
@@ -55,9 +70,11 @@ func main() {
 		}
 
 		log.Printf("Product received: \n%v\n", product)
+		prodStore.saveProduct(*product)
 	})
 
 	http.HandleFunc("/healthz", s.healthz)
+	http.HandleFunc("/products", productsHandler)
 
 	log.Println("====== Subscriber 2 listening on port 8181..")
 	if err := http.ListenAndServe(":8181", nil); err != nil {
